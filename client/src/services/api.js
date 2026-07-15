@@ -23,6 +23,11 @@ export const vehicleService = {
   getAvailable: (filters) => API.get('/vehicles/available', { params: filters }),
 };
 
+export const bookingService = {
+  create: (bookingData) => API.post('/bookings/reserve', bookingData),
+  getUserHistory: (userId) => API.get(`/bookings/user/${userId}`),
+};
+
 export const aiService = {
   getRecommendations: (promptData) => API.post('/ai/recommend', promptData),
 };
