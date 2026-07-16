@@ -5,89 +5,49 @@ const BookingHistory = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
   const loggedInUser = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     const fetchHistory = async () => {
       if (!loggedInUser) {
-        setError('Please log in to view your booking history.');
+        setError('Session missing: Please login to poll booking logs.');
         setLoading(false);
         return;
       }
-
       try {
         const response = await bookingService.getUserHistory(loggedInUser.user_id);
         setBookings(response.data);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to load booking history.');
+        setError('Failed to resolve transaction statement tree.');
       } finally {
         setLoading(false);
       }
     };
-
     fetchHistory();
   }, []);
 
-  if (loading) {
-    return <div style={{ textAlign: 'center', marginTop: '3rem', fontFamily: 'sans-serif' }}>Loading your bookings...</div>;
-  }
+  if (loading) return <div style={{ textAlign: 'center', marginTop: '4rem', color: '#94a3b8' }}>Polling active transaction statements...</div>;
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '900px', margin: '0 auto', fontFamily: 'sans-serif' }}>
-      <h2 style={{ color: '#2c3e50', borderBottom: '2px solid #ecf0f1', paddingBottom: '0.5rem' }}>📋 Your Rental History</h2>
+    <div style={{ padding: '3rem 2rem', maxWidth: '900px', margin: '0 auto' }}>
+      <h2 style={{ color: '#f8fafc', fontSize: '2rem', fontWeight: '800', borderBottom: '1px solid #334155', paddingBottom: '0.8rem', marginBottom: '2rem' }}>📋 Rental History Record Matrix</h2>
       
-      {error && <p style={{ color: '#e74c3c', fontWeight: 'bold' }}>{error}</p>}
+      {error && <p style={{ color: '#f87171', fontWeight: '600' }}>{error}</p>}
+      {bookings.length === 0 && !error && <p style={{ color: '#64748b' }}>No verified query histories matching user ID allocation.</p>}
 
-      {!error && bookings.length === 0 && (
-        <p style={{ color: '#7f8c8d', marginTop: '1.5rem' }}>You haven't made any reservations yet.</p>
-      )}
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1.5rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
         {bookings.map((booking) => (
-          <div 
-            key={booking.booking_id} 
-            style={{ 
-              border: '1px solid #e0e0e0', 
-              borderRadius: '8px', 
-              padding: '1.5rem', 
-              boxShadow: '0 2px 5px rgba(0,0,0,0.05)', 
-              backgroundColor: '#fff',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}
-          >
+          <div key={booking.booking_id} style={{ border: '1px solid #334155', borderRadius: '12px', padding: '1.5rem', backgroundColor: '#1e293b', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}>
             <div>
-              <h3 style={{ margin: '0 0 0.5rem 0', color: '#2980b9' }}>
-                {booking.make} {booking.model}
-              </h3>
-              <p style={{ margin: '0 0 0.25rem 0', color: '#7f8c8d', fontSize: '0.9rem' }}>
-                <strong>Plate:</strong> {booking.license_plate}
-              </p>
-              <p style={{ margin: '0 0 0.25rem 0', color: '#34495e' }}>
-                <strong>Duration:</strong> {new Date(booking.start_date).toLocaleDateString()} to {new Date(booking.end_date).toLocaleDateString()}
-              </p>
+              <h3 style={{ margin: '0 0 0.5rem 0', color: '#38bdf8', fontSize: '1.3rem' }}>{booking.make} {booking.model}</h3>
+              <p style={{ margin: '0 0 0.25rem 0', color: '#94a3b8', fontSize: '0.9rem' }}><strong>Registration Tag:</strong> <span style={{ fontFamily: 'monospace' }}>{booking.license_plate}</span></p>
+              <p style={{ margin: 0, color: '#cbd5e1' }}><strong>Active Schedule Window:</strong> {new Date(booking.start_date).toLocaleDateString()} — {new Date(booking.end_date).toLocaleDateString()}</p>
             </div>
-
             <div style={{ textAlign: 'right' }}>
-              <span 
-                style={{ 
-                  display: 'inline-block',
-                  padding: '0.3rem 0.6rem', 
-                  borderRadius: '4px', 
-                  backgroundColor: booking.status === 'Confirmed' || booking.status === 'Completed' ? '#2ecc71' : '#f39c12', 
-                  color: '#fff', 
-                  fontWeight: 'bold',
-                  fontSize: '0.85rem',
-                  marginBottom: '0.5rem'
-                }}
-              >
+              <span style={{ display: 'inline-block', padding: '0.3rem 0.6rem', borderRadius: '6px', backgroundColor: 'rgba(74,222,128,0.15)', color: '#4ade80', fontWeight: '700', fontSize: '0.8rem', border: '1px solid rgba(74,222,128,0.3)', marginBottom: '0.6rem' }}>
                 {booking.status}
               </span>
-              <div style={{ fontSize: '1.3rem', fontWeight: 'bold', color: '#2c3e50' }}>
-                ${booking.total_cost}
-              </div>
+              <div style={{ fontSize: '1.6rem', fontWeight: '800', color: '#f8fafc' }}>${booking.total_cost}</div>
             </div>
           </div>
         ))}

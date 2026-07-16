@@ -4,20 +4,12 @@ import { authService } from '../services/api';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    phone: '',
-    license_number: ''
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', phone: '', license_number: '' });
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,36 +18,31 @@ const Auth = () => {
 
     try {
       if (isLogin) {
-        // Send Login Request
-        const response = await authService.login({
-          email: formData.email,
-          password: formData.password
-        });
+        const response = await authService.login({ email: formData.email, password: formData.password });
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        setMessage('Login successful! Redirecting...');
-        setTimeout(() => navigate('/'), 1500);
+        setMessage('🔓 Login successful! Syncing session context...');
+        setTimeout(() => { navigate('/'); window.location.reload(); }, 1200);
       } else {
-        // Send Registration Request
         await authService.register(formData);
-        setMessage('Registration successful! Please login.');
+        setMessage('✅ Registration complete! Proceed to sign in.');
         setIsLogin(true);
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Authentication failed. Try again.');
+      setError(err.response?.data?.message || 'Authentication framework rejection.');
     }
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '4rem auto', padding: '2rem', border: '1px solid #e0e0e0', borderRadius: '8px', boxShadow: '0 4px 10px rgba(0,0,0,0.05)', backgroundColor: '#fff', fontFamily: 'sans-serif' }}>
-      <h2 style={{ textAlign: 'center', color: '#2c3e50', marginBottom: '1.5rem' }}>
-        {isLogin ? 'Welcome Back' : 'Create Account'}
+    <div style={{ maxWidth: '420px', margin: '5rem auto', padding: '2.5rem', backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '16px', boxShadow: '0 10px 40px rgba(0,0,0,0.4)' }}>
+      <h2 style={{ textAlign: 'center', color: '#f8fafc', fontSize: '1.8rem', fontWeight: '800', margin: '0 0 2rem 0' }}>
+        {isLogin ? 'Sign In to Account' : 'Register Profile'}
       </h2>
 
-      {error && <p style={{ color: '#e74c3c', textAlign: 'center', fontSize: '0.9rem' }}>{error}</p>}
-      {message && <p style={{ color: '#2ecc71', textAlign: 'center', fontSize: '0.9rem' }}>{message}</p>}
+      {error && <p style={{ color: '#f87171', fontSize: '0.9rem', backgroundColor: 'rgba(248,113,113,0.1)', padding: '0.6rem', borderRadius: '6px', textAlign: 'center' }}>{error}</p>}
+      {message && <p style={{ color: '#4ade80', fontSize: '0.9rem', backgroundColor: 'rgba(74,222,128,0.1)', padding: '0.6rem', borderRadius: '6px', textAlign: 'center' }}>{message}</p>}
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', marginTop: '1rem' }}>
         {!isLogin && (
           <input
             type="text"
@@ -63,7 +50,7 @@ const Auth = () => {
             placeholder="Full Name"
             value={formData.name}
             onChange={handleChange}
-            style={{ padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }}
+            style={{ padding: '0.8rem', borderRadius: '8px', border: '1px solid #334155', backgroundColor: '#0f172a', color: '#fff', outline: 'none' }}
             required
           />
         )}
@@ -73,16 +60,16 @@ const Auth = () => {
           placeholder="Email Address"
           value={formData.email}
           onChange={handleChange}
-          style={{ padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }}
+          style={{ padding: '0.8rem', borderRadius: '8px', border: '1px solid #334155', backgroundColor: '#0f172a', color: '#fff', outline: 'none' }}
           required
         />
         <input
           type="password"
           name="password"
-          placeholder="Password"
+          placeholder="Secure Password"
           value={formData.password}
           onChange={handleChange}
-          style={{ padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }}
+          style={{ padding: '0.8rem', borderRadius: '8px', border: '1px solid #334155', backgroundColor: '#0f172a', color: '#fff', outline: 'none' }}
           required
         />
         {!isLogin && (
@@ -90,19 +77,19 @@ const Auth = () => {
             <input
               type="text"
               name="phone"
-              placeholder="Phone Number"
+              placeholder="Phone Contact Connection"
               value={formData.phone}
               onChange={handleChange}
-              style={{ padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }}
+              style={{ padding: '0.8rem', borderRadius: '8px', border: '1px solid #334155', backgroundColor: '#0f172a', color: '#fff', outline: 'none' }}
               required
             />
             <input
               type="text"
               name="license_number"
-              placeholder="Driving License Number"
+              placeholder="Driving License Serial"
               value={formData.license_number}
               onChange={handleChange}
-              style={{ padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }}
+              style={{ padding: '0.8rem', borderRadius: '8px', border: '1px solid #334155', backgroundColor: '#0f172a', color: '#fff', outline: 'none' }}
               required
             />
           </>
@@ -110,19 +97,16 @@ const Auth = () => {
         
         <button
           type="submit"
-          style={{ padding: '0.75rem', borderRadius: '4px', border: 'none', backgroundColor: '#2ecc71', color: '#fff', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer', marginTop: '0.5rem' }}
+          style={{ padding: '0.8rem', borderRadius: '8px', border: 'none', backgroundColor: '#38bdf8', color: '#0f172a', fontSize: '1rem', fontWeight: '700', cursor: 'pointer', marginTop: '0.5rem' }}
         >
-          {isLogin ? 'Sign In' : 'Sign Up'}
+          {isLogin ? 'Access Console' : 'Complete Setup'}
         </button>
       </form>
 
-      <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.9rem', color: '#7f8c8d' }}>
-        {isLogin ? "Don't have an account? " : "Already have an account? "}
-        <span 
-          onClick={() => setIsLogin(!isLogin)} 
-          style={{ color: '#3498db', cursor: 'pointer', fontWeight: 'bold' }}
-        >
-          {isLogin ? 'Register Here' : 'Login Here'}
+      <p style={{ textAlign: 'center', marginTop: '2rem', fontSize: '0.9rem', color: '#94a3b8' }}>
+        {isLogin ? "New user parameter? " : "Already verified? "}
+        <span onClick={() => setIsLogin(!isLogin)} style={{ color: '#38bdf8', cursor: 'pointer', fontWeight: '700' }}>
+          {isLogin ? 'Create Account' : 'Sign In'}
         </span>
       </p>
     </div>
