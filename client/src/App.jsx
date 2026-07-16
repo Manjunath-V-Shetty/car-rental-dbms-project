@@ -4,6 +4,7 @@ import AIRecommendation from './pages/AIRecommendation';
 import Auth from './pages/Auth';
 import BookingHistory from './pages/BookingHistory';
 import AdminDashboard from './pages/AdminDashboard';
+import Analytics from './pages/Analytics';
 
 function App() {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -25,6 +26,7 @@ function App() {
               <>
                 <Link to="/bookings" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>My Bookings</Link>
                 <Link to="/admin" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>Admin Panel</Link>
+                <Link to="/analytics" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>System Metrics</Link>
               </>
             )}
           </div>
@@ -46,6 +48,7 @@ function App() {
           <Route path="/auth" element={<Auth />} />
           <Route path="/bookings" element={<BookingHistory />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/analytics" element={<Analytics />} />
         </Routes>
       </div>
     </Router>

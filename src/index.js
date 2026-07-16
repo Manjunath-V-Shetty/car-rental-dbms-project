@@ -5,7 +5,8 @@ const pool = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const vehicleRoutes = require('./routes/vehicleRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
-const aiRoutes = require('./routes/aiRoutes'); // 1. Import AI Routes
+const aiRoutes = require('./routes/aiRoutes');
+const analyticsRoutes = require('./routes/analyticsRoutes'); // 1. Import Analytics
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,7 +19,8 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/vehicles', vehicleRoutes);
 app.use('/api/bookings', bookingRoutes);
-app.use('/api/ai', aiRoutes); // 2. Use AI Routes
+app.use('/api/ai', aiRoutes);
+app.use('/api/analytics', analyticsRoutes); // 2. Use Analytics
 
 app.get('/', (req, res) => {
   res.send('Car Rental System API is running smoothly.');

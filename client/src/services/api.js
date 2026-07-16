@@ -1,11 +1,9 @@
 import axios from 'axios';
 
-// Create a configured Axios instance pointed directly at your local Node server port
 const API = axios.create({
   baseURL: 'http://localhost:5000/api',
 });
 
-// Automatically inject your secure JWT login token into headers if it exists in local storage
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -31,6 +29,10 @@ export const bookingService = {
 
 export const aiService = {
   getRecommendations: (promptData) => API.post('/ai/recommend', promptData),
+};
+
+export const analyticsService = {
+  getMetrics: () => API.get('/analytics/metrics'),
 };
 
 export default API;
