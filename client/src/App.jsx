@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import AIRecommendation from './pages/AIRecommendation';
 import Auth from './pages/Auth';
 import BookingHistory from './pages/BookingHistory';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -21,7 +22,10 @@ function App() {
             <h1 style={{ color: '#fff', margin: 0, fontSize: '1.5rem' }}>🚗 FleetDrive</h1>
             <Link to="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>AI Assistant</Link>
             {user && (
-              <Link to="/bookings" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>My Bookings</Link>
+              <>
+                <Link to="/bookings" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>My Bookings</Link>
+                <Link to="/admin" style={{ color: '#fff', textDecoration: 'none', fontWeight: '500' }}>Admin Panel</Link>
+              </>
             )}
           </div>
           <div>
@@ -41,6 +45,7 @@ function App() {
           <Route path="/" element={<AIRecommendation />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/bookings" element={<BookingHistory />} />
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </div>
     </Router>

@@ -21,6 +21,7 @@ export const authService = {
 
 export const vehicleService = {
   getAvailable: (filters) => API.get('/vehicles/available', { params: filters }),
+  add: (vehicleData) => API.post('/vehicles/add', vehicleData),
 };
 
 export const bookingService = {
